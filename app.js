@@ -1,6 +1,3 @@
-
-
-
 // Setting up server
 var debug = require( 'debug' )( 'geotargeting' );
 var responseTime = require( 'koa-response-time' );
@@ -15,6 +12,9 @@ var winston = require( 'winston' );
 var loader = require( './lib/loader' )();
 var geocoder = require( './lib/geocoder' )();
 var locator = require( './lib/locator' )();
+var cache = require( './lib/cache' )( {
+  storage: process.env.DATABASE_URL,
+} );
 
 var koa = require( 'koa' );
 var path = require( 'path' );
@@ -37,10 +37,19 @@ app.get( '/favicon.ico', function *() {
   this.type = "image/x-icon";
 } );
 
-app.get( '/locations/:map/:lng/:lat', loader, locator );
-app.get( '/locations/:map/:address', loader, geocoder, locator );
-app.get( '/locations/:map', loader, geocoder, locator );
-app.get( '/:map', loader );
+// The routes are first handled by geocoder to ensure lng and lat params.
+// It then goes through the first cache layer that will check for locations
+// cache to return. If not, if then check if the map KML is cached and set
+// the body so that the loader does not request Google again. The loader
+// prepare the body with map data if necessary, then go through the second
+// cache layer. This cache sees that the body is filled, so it updates 
+// with the new data, ensuring cache for next request. The locator then fills
+// the body with nearest locations as JSON. This JSON will be cached by the 
+// first cache layer before returned to the client.
+app.get( '/locations/:map/:lng/:lat', cache, loader, cache, locator );
+app.get( '/locations/:map/:address', geocoder, cache, loader, cache, locator );
+app.get( '/locations/:map', geocoder, cache, loader, cache, locator );
+app.get( '/:map', cache, loader );
 
 // Start server.
 var port = process.env.PORT || 9876;
