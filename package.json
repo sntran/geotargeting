@@ -1,6 +1,6 @@
 {
   "name": "geotargeting",
-  "version": "0.5.0",
+  "version": "0.7.0",
   "description": "\"REST API for Google Map data of nearest locations\"",
   "author": {
     "name": "Son Tran-Nguyen",
@@ -44,11 +44,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://www.github.com/sntran/geotargetting"
+    "url": "https://github.com/sntran/geotargeting.git"
   },
   "keywords": [
     "geoip",
-    "geotargetting",
+    "geocoder",
+    "geotargeting",
     "geolocation"
   ],
   "license": "MIT"

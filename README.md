@@ -1,19 +1,21 @@
 geotargeting
 ============
 
-REST API for Google Map data of nearest locations.
+REST API for Google Map data of nearest locations. It takes locations from a 
+KML file served by Google Map Engine, and return nearest ones from either an
+address or the user's current location.
 
 Requirements
 ------------
-* Node.js v0.11.3+
+* Node.js v0.11.3+ for ES6 generators support.
 * Redis server for caching.
 
 Usage
 -----
 To run the service, use `npm start`.
 Default port is 9876, use `PORT` environment variable to change.
-Cache will default to `redis://localhost:6379` if process.env.DATABASE_URL is
-not defined.
+Cache will default to `redis://localhost:6379` if `process.env.DATABASE_URL`
+is not defined.
 
 End points
 ----------
@@ -25,8 +27,12 @@ from the input address. This address is geocoded into long and lat.
 * `/locations/:map/:long/:lat`: nearest locations in KML
 data from the input long and lat.
 
-All endpoints except the KML file support a `fields` query to filter
-the response from the route. See `json-mask` module for details.
+Querystring
+-----------
+Certain queries are supported to deal with JSON response.
+
+* `fields` to remove all but specified fields. See `json-mask`.
+* `select` for a more advance selector. See `jspath`.
 
 License
 -------
