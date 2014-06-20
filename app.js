@@ -7,6 +7,7 @@ var compress = require( 'koa-compress' );
 var logger = require( 'koa-logger' );
 var router = require( 'koa-router' );
 var mask = require( 'koa-json-mask' );
+var jsonp = require( 'koa-jsonp' );
 
 var winston = require( 'winston' );
 var loader = require( './lib/loader' )();
@@ -27,6 +28,7 @@ app.use( logger() );
 app.use( fresh() );
 app.use( etag() );
 app.use( compress() );
+app.use( jsonp() );
 // Support `fields` query string to reduce response, @see json-mask.
 app.use( mask() );
 app.use( router( app ) );
