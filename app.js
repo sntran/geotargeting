@@ -8,6 +8,7 @@ var logger = require( 'koa-logger' );
 var router = require( 'koa-router' );
 var mask = require( 'koa-json-mask' );
 var jsonp = require( 'koa-jsonp' );
+var selector = require( './lib/koa-js-select' );
 
 var winston = require( 'winston' );
 var loader = require( './lib/loader' )();
@@ -31,6 +32,7 @@ app.use( compress() );
 app.use( jsonp() );
 // Support `fields` query string to reduce response, @see json-mask.
 app.use( mask() );
+app.use( selector() );
 app.use( router( app ) );
 
 // Small fix to prevent request for favicon.ico.
