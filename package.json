@@ -1,6 +1,6 @@
 {
   "name": "geotargeting",
-  "version": "0.7.0",
+  "version": "0.7.2",
   "description": "\"REST API for Google Map data of nearest locations\"",
   "author": {
     "name": "Son Tran-Nguyen",
@@ -24,6 +24,7 @@
     "koa-router": "~3.1.4",
     "koa-compress": "~1.0.7",
     "koa-json-mask": "~0.1.0",
+    "koa-jsonp": "0.0.3",
     "thunkify": "~2.1.2",
     "redis": "~0.8.4",
     "co-redis": "~1.1.0",
@@ -33,9 +34,7 @@
     "co-request": "~0.2.0",
     "geoip-lite": "~1.1.3",
     "xml2js": "~0.4.4",
-    "geocoder": "~0.2.0",
-    "jspath": "~0.2.12",
-    "koa-jsonp": "0.0.3"
+    "jspath": "~0.2.12"
   },
   "devDependencies": {
     "vows": "0.7.0",
