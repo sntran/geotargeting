@@ -10,7 +10,6 @@ var mask = require( 'koa-json-mask' );
 var jsonp = require( 'koa-jsonp' );
 var selector = require( './lib/koa-js-select' );
 
-var winston = require( 'winston' );
 var loader = require( './lib/loader' )();
 var geocoder = require( './lib/geocoder' )();
 var locator = require( './lib/locator' )();
@@ -58,5 +57,5 @@ app.get( '/:map', cache, loader );
 // Start server.
 var port = process.env.PORT || 9876;
 app.listen( port, function() {
-  winston.info( 'Geotargeting service is listening on port %d', port ) ;
+  debug( 'Geotargeting service is listening on port %d', port ) ;
 });
