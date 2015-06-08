@@ -17,6 +17,8 @@ Default port is 9876, use `PORT` environment variable to change.
 Cache will default to `redis://localhost:6379` if `process.env.DATABASE_URL`
 is not defined.
 
+For debug, use `DEBUG=geotargeting:*`.
+
 End points
 ----------
 * `/:map`: the KML file with id `:map`.
@@ -31,6 +33,7 @@ Querystring
 -----------
 Certain queries are supported to deal with JSON response.
 
+* `override`, when set to true, will ignore cache if any.
 * `fields` to remove all but specified fields. See `json-mask`.
 * `select` for a more advance selector. See `jspath`.
 
