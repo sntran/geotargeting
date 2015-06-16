@@ -52,7 +52,7 @@ app.get( '/favicon.ico', function *() {
 app.get( '/locations/:map/:lng/:lat', cache, loader, cache, locator );
 app.get( '/locations/:map/:address', geocoder, cache, loader, cache, locator );
 app.get( '/locations/:map', geocoder, cache, loader, cache, locator );
-app.get( '/:map', cache, loader, cache );
+app.get( '/:map', cache, loader );
 
 // Start server.
 var port = process.env.PORT || 9876;
