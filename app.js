@@ -25,8 +25,8 @@ var app = module.exports = koa();
 // to wrap all subsequent middlewares.
 app.use( responseTime() );
 app.use( logger() );
-// app.use( fresh() );
-// app.use( etag() );
+app.use( fresh() );
+app.use( etag() );
 app.use( compress() );
 app.use( jsonp() );
 // Support `fields` query string to reduce response, @see json-mask.
