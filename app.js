@@ -1,3 +1,8 @@
+/*jslint         indent  : 2,    maxerr   : 50,
+  esnext : true, -W030   : true, node     : true
+*/
+"use strict";
+
 // Setting up server
 var debug = require( 'debug' )( 'geotargeting' );
 var responseTime = require( 'koa-response-time' );
