@@ -7,7 +7,7 @@ address or the user's current location.
 
 Requirements
 ------------
-* Node.js v0.11.3+ for ES6 generators support.
+* Node.js v4.0.0+ for ES6 generators support.
 * Redis server for caching.
 
 Usage
