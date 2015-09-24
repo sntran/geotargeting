@@ -9,11 +9,11 @@
   },
   "main": "app.js",
   "scripts": {
-    "start": "node --harmony app.js",
-    "test": "mocha --harmony"
+    "start": "node app.js",
+    "test": "mocha"
   },
   "engines": {
-    "node": "0.11.13"
+    "node": "~4.0.0"
   },
   "dependencies": {
     "co-redis": "~1.1.0",
