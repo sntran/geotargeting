@@ -1,6 +1,6 @@
 {
   "name": "geotargeting",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "description": "\"REST API for Google Map data of nearest locations\"",
   "author": {
     "name": "Son Tran-Nguyen",
