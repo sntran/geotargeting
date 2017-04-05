@@ -34,7 +34,6 @@
     "redis": "^2.7.1",
     "request": "^2.81.0",
     "thunkify": "^2.1.2",
-    "unzipper": "^0.8.8",
     "xml2js": "^0.4.17"
   },
   "devDependencies": {
