@@ -13,14 +13,23 @@ var logger = require( 'koa-logger' );
 var router = require( 'koa-router' )();
 var mask = require( 'koa-json-mask' );
 var jsonp = require( 'koa-jsonp' );
-var selector = require( './lib/koa-js-select' );
 
-var loader = require( './lib/loader' )();
+var MAP_EXPIRATION = 3600; // in seconds.
+var LOCATION_EXPIRATION = 24 * 3600; // in seconds.
+
+var utils = require('./lib/utils');
+var storage = utils.getStorage(process.env.DATABASE_URL);
+
+var selector = require( './lib/koa-js-select' );
 var geocoder = require( './lib/geocoder' )();
 var locator = require( './lib/locator' )();
 var cache = require( './lib/cache' )( {
-  storage: process.env.DATABASE_URL,
+  storage: storage,
+  expire: MAP_EXPIRATION
 } );
+var loader = require( './lib/loader' )({
+  geocode: maybeGeocode
+});
 
 var koa = require( 'koa' );
 var path = require( 'path' );
@@ -65,3 +74,55 @@ var port = process.env.PORT || 9876;
 app.listen( port, function() {
   debug( 'Geotargeting service is listening on port %d', port ) ;
 });
+
+/**
+ * Looks up coordinates from cache or geocoder.
+ * @param {String} address - The address to geocode.
+ * @returns {Promise} - an object with lat,lng, or error.
+ *
+ * We store the timestamp in the value of the cache instead of
+ * the expiration time so that we can reset the cache by changing
+ * `LOCATION_EXPIRATION` value.
+ */
+function maybeGeocode(address) {
+  var debug = require( 'debug' )( 'geocoder' );
+  var cacheKey = 'locations';
+  return new Promise(function(resolve, reject) {
+    // We use Redis hash here so we can delete them all if needed.
+    storage.hget( cacheKey, address )
+    .then(function(cache) {
+      var now = Date.now();
+      if (cache) {
+        debug('Get coordinates for', address, 'from cache');
+        var values = cache.split(',');
+        var lat = Number(values[0]);
+        var lng = Number(values[1]);
+        var timestamp = Number(values[2]);
+
+        if (timestamp + LOCATION_EXPIRATION * 1000 < now) {
+          // Expired - return the coords, but geocode asynchronously.
+          debug('Cache for', address, 'is stale.');
+          utils.geocode(address)(function(err, coords) {
+            if (!err) {
+              var value = coords.lat+','+coords.lng+','+now;
+              storage.hset( cacheKey, address, value);
+            }
+          });
+        }
+        return resolve({lat: lat, lng: lng});
+      } else {
+        // No cache, geocode.
+        debug('No cache for', address, ', geocoding.');
+        utils.geocode(address)(function(err, coords) {
+          if (err) {
+            return reject(err);
+          }
+          var value = coords.lat+','+coords.lng+','+now;
+          storage.hset( cacheKey, address, value);
+          resolve({lat: coords.lat, lng: coords.lng});
+        });
+      }
+    }, console.error);
+
+  });
+}
