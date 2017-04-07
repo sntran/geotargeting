@@ -21,8 +21,6 @@ var utils = require('./lib/utils');
 var storage = utils.getStorage(process.env.DATABASE_URL);
 
 var selector = require( './lib/koa-js-select' );
-var geocoder = require( './lib/geocoder' )();
-var locator = require( './lib/locator' )();
 var cache = require( './lib/cache' )( {
   storage: storage,
   expire: MAP_EXPIRATION
@@ -30,6 +28,10 @@ var cache = require( './lib/cache' )( {
 var loader = require( './lib/loader' )({
   geocode: maybeGeocode
 });
+var geocoder = require( './lib/geocoder' )({
+  geocode: maybeGeocode
+});
+var locator = require( './lib/locator' )();
 
 var koa = require( 'koa' );
 var path = require( 'path' );
